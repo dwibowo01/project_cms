@@ -2,6 +2,8 @@
 
 namespace Database\Seeders;
 
+use App\Enums\CentralRoles;
+use App\Models\Role;
 use App\Models\User;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
@@ -15,11 +17,13 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
-        // User::factory(10)->create();
+        $this->call(CentralPermissionsSeeder::class);
 
-        User::factory()->create([
-            'name' => 'Test User',
-            'email' => 'test@example.com',
+        $superAdmin = User::factory()->create([
+            'name' => 'Super Admin',
+            'email' => 'superadmin@example.com',
         ]);
+
+        $superAdmin->assignRole(Role::where('name', CentralRoles::SUPER_ADMIN->value)->first());
     }
 }

@@ -32,7 +32,9 @@ class TenantUserController extends Controller implements HasMiddleware
     {
         return view('tenants.users.index', [
             'tenant' => $tenant,
-            'users' => User::withoutCentralApp()->where('tenant_id', $tenant->id)->paginate(),
+            'users' => User::withoutCentralApp()
+                ->whereHas('tenants', fn ($q) => $q->where('tenant_id', $tenant->id))
+                ->paginate(),
         ]);
     }
 
@@ -49,8 +51,9 @@ class TenantUserController extends Controller implements HasMiddleware
             'name' => $request->input('name'),
             'email' => $request->input('email'),
             'password' => Hash::make($request->input('password')),
-            'tenant_id' => $tenant->id,
         ]);
+
+        $user->tenants()->attach($tenant->id);
 
         $tenant->run(function () use ($user, $request) {
             $user->syncRoles($request->input('roles', []));
@@ -77,7 +80,7 @@ class TenantUserController extends Controller implements HasMiddleware
         [$user, $roles] = $tenant->run(function () use ($tenant, $userId) {
             return [
                 User::withoutCentralApp()
-                    ->where('tenant_id', $tenant->id)
+                    ->whereHas('tenants', fn ($q) => $q->where('tenant_id', $tenant->id))
                     ->with('roles', 'roles.permissions')
                     ->findOrFail($userId),
                 Role::with('permissions')->get(),
@@ -93,7 +96,9 @@ class TenantUserController extends Controller implements HasMiddleware
 
     public function update(UpdateUserRequest $request, Tenant $tenant, int $userId): RedirectResponse
     {
-        $user = User::withoutCentralApp()->where('tenant_id', $tenant->id)->findOrFail($userId);
+        $user = User::withoutCentralApp()
+            ->whereHas('tenants', fn ($q) => $q->where('tenant_id', $tenant->id))
+            ->findOrFail($userId);
 
         $data = $request->only(['name', 'email']);
 
@@ -120,11 +125,18 @@ class TenantUserController extends Controller implements HasMiddleware
             'password' => ['required', 'current_password'],
         ]);
 
-        $user = User::withoutCentralApp()->where('tenant_id', $tenant->id)->findOrFail($userId);
+        $user = User::withoutCentralApp()
+            ->whereHas('tenants', fn ($q) => $q->where('tenant_id', $tenant->id))
+            ->findOrFail($userId);
 
-        $user->delete();
+        $user->tenants()->detach($tenant->id);
+
+        // Delete the user account if they no longer belong to any tenant
+        if ($user->tenants()->count() === 0) {
+            $user->delete();
+        }
 
         return redirect()->route('tenants.users.index', $tenant)
-            ->with('success', __('User deleted successfully.'));
+            ->with('success', __('User removed successfully.'));
     }
 }
