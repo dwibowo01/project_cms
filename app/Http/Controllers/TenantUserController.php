@@ -21,10 +21,10 @@ class TenantUserController extends Controller implements HasMiddleware
     public static function middleware(): array
     {
         return [
-            new Middleware(PermissionMiddleware::using(CentralPermissions::CREATE_TENANT_USER), only: ['create', 'store']),
-            new Middleware(PermissionMiddleware::using(CentralPermissions::VIEW_TENANT_USER), only: ['index', 'show']),
-            new Middleware(PermissionMiddleware::using(CentralPermissions::UPDATE_TENANT_USER), only: ['edit', 'update']),
-            new Middleware(PermissionMiddleware::using(CentralPermissions::DELETE_TENANT_USER), only: ['destroy']),
+            new Middleware(PermissionMiddleware::using(CentralPermissions::CREATE_TEAM_USER), only: ['create', 'store']),
+            new Middleware(PermissionMiddleware::using(CentralPermissions::VIEW_TEAM_USER), only: ['index', 'show']),
+            new Middleware(PermissionMiddleware::using(CentralPermissions::UPDATE_TEAM_USER), only: ['edit', 'update']),
+            new Middleware(PermissionMiddleware::using(CentralPermissions::DELETE_TEAM_USER), only: ['destroy']),
         ];
     }
 

@@ -72,14 +72,16 @@
             </span>
         </div> --}}
 
-        {{-- SITE — coming soon --}}
-        <div title="Coming Soon"
-            style="position:absolute;inset:0;background:url('/Website_Slider.jpg') center/cover no-repeat;clip-path:polygon(84.8% 0%, 100% 0%, 100% 100%, 54.4% 100%);opacity:0.4;cursor:not-allowed;">
+        {{-- SITE --}}
+        <a href="{{ $scheme }}://project_cms.test/login?tenant=site"
+            style="position:absolute;inset:0;background:url('/Website_Slider.jpg') center/cover no-repeat;clip-path:polygon(84.8% 0%, 100% 0%, 100% 100%, 54.4% 100%);text-decoration:none;"
+            onmouseover="this.style.background='linear-gradient(rgba(52,169,236,0.55),rgba(52,169,236,0.55)),url(/Website_Slider.jpg) center/cover no-repeat'"
+            onmouseout="this.style.background='url(/Website_Slider.jpg) center/cover no-repeat'">
             <span
                 style="position:absolute;color:#fff;font-family:'Bebas Neue',sans-serif;font-size:5vw;left:80%;top:55%;transform:translateY(-50%);letter-spacing:0.05em;pointer-events:none;">
                 SITE
             </span>
-        </div>
+        </a>
 
     </main>
 

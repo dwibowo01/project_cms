@@ -19,10 +19,10 @@ class RoleController extends Controller implements HasMiddleware
     public static function middleware(): array
     {
         return [
-            new Middleware(PermissionMiddleware::using([CentralPermissions::CREATE_ROLE, Permissions::CREATE_ROLE_BY_TENANT]), only: ['create', 'store']),
-            new Middleware(PermissionMiddleware::using([CentralPermissions::VIEW_ROLE, Permissions::VIEW_ROLE_BY_TENANT]), only: ['index', 'show']),
-            new Middleware(PermissionMiddleware::using([CentralPermissions::UPDATE_ROLE, Permissions::UPDATE_ROLE_BY_TENANT]), only: ['edit', 'update']),
-            new Middleware(PermissionMiddleware::using([CentralPermissions::DELETE_ROLE, Permissions::DELETE_ROLE_BY_TENANT]), only: ['destroy']),
+            new Middleware(PermissionMiddleware::using([CentralPermissions::CREATE_ROLE, Permissions::CREATE_ROLE_BY_TEAM]), only: ['create', 'store']),
+            new Middleware(PermissionMiddleware::using([CentralPermissions::VIEW_ROLE, Permissions::VIEW_ROLE_BY_TEAM]), only: ['index', 'show']),
+            new Middleware(PermissionMiddleware::using([CentralPermissions::UPDATE_ROLE, Permissions::UPDATE_ROLE_BY_TEAM]), only: ['edit', 'update']),
+            new Middleware(PermissionMiddleware::using([CentralPermissions::DELETE_ROLE, Permissions::DELETE_ROLE_BY_TEAM]), only: ['destroy']),
         ];
     }
 

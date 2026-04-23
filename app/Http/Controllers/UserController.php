@@ -20,10 +20,10 @@ class UserController extends Controller implements HasMiddleware
     public static function middleware(): array
     {
         return [
-            new Middleware(PermissionMiddleware::using(Permissions::CREATE_TENANT_USER_BY_TENANT), only: ['create', 'store']),
-            new Middleware(PermissionMiddleware::using(Permissions::VIEW_TENANT_USER_BY_TENANT), only: ['index', 'show']),
-            new Middleware(PermissionMiddleware::using(Permissions::UPDATE_TENANT_USER_BY_TENANT), only: ['edit', 'update']),
-            new Middleware(PermissionMiddleware::using(Permissions::DELETE_TENANT_USER_BY_TENANT), only: ['destroy']),
+            new Middleware(PermissionMiddleware::using(Permissions::CREATE_TEAM_USER_BY_TEAM), only: ['create', 'store']),
+            new Middleware(PermissionMiddleware::using(Permissions::VIEW_TEAM_USER_BY_TEAM), only: ['index', 'show']),
+            new Middleware(PermissionMiddleware::using(Permissions::UPDATE_TEAM_USER_BY_TEAM), only: ['edit', 'update']),
+            new Middleware(PermissionMiddleware::using(Permissions::DELETE_TEAM_USER_BY_TEAM), only: ['destroy']),
         ];
     }
 

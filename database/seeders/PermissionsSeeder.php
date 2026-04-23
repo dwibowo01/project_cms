@@ -3,6 +3,7 @@
 namespace Database\Seeders;
 
 use App\Enums\Permissions;
+use App\Enums\Roles;
 use App\Models\Permission;
 use App\Models\Tenant;
 use Illuminate\Database\Seeder;
@@ -15,8 +16,15 @@ class PermissionsSeeder extends Seeder
         Tenant::all()->runForEach(function () {
             app()[PermissionRegistrar::class]->forgetCachedPermissions();
 
-            foreach (Permissions::cases() as $permission) {
-                Permission::firstOrCreate(['name' => $permission->value]);
+            $tenantId = tenant('id');
+
+            foreach (Roles::byTenant($tenantId) as $roleEnum) {
+                foreach (Permissions::byRole($roleEnum) as $permissionEnum) {
+                    Permission::firstOrCreate(
+                        ['name' => $permissionEnum->value, 'tenant_id' => $tenantId],
+                        ['guard_name' => 'web']
+                    );
+                }
             }
         });
     }

@@ -4,15 +4,15 @@ namespace App\Enums;
 
 enum CentralPermissions: string
 {
-    case CREATE_TENANT = 'create tenant';
-    case VIEW_TENANT = 'view tenant';
-    case UPDATE_TENANT = 'update tenant';
-    case DELETE_TENANT = 'delete tenant';
+    case CREATE_TEAM = 'create team';
+    case VIEW_TEAM = 'view team';
+    case UPDATE_TEAM = 'update team';
+    case DELETE_TEAM = 'delete team';
 
-    case CREATE_TENANT_USER = 'create tenant user';
-    case VIEW_TENANT_USER = 'view tenant user';
-    case UPDATE_TENANT_USER = 'update tenant user';
-    case DELETE_TENANT_USER = 'delete tenant user';
+    case CREATE_TEAM_USER = 'create team user';
+    case VIEW_TEAM_USER = 'view team user';
+    case UPDATE_TEAM_USER = 'update team user';
+    case DELETE_TEAM_USER = 'delete team user';
 
     case CREATE_ROLE = 'create role';
     case VIEW_ROLE = 'view role';
