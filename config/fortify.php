@@ -89,7 +89,7 @@ return [
 
     'prefix' => '',
 
-    'domain' => 'project_cms.test',
+    'domain' => env('FORTIFY_DOMAIN', null),
 
     /*
     |--------------------------------------------------------------------------

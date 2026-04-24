@@ -2,6 +2,12 @@
     Shrinkable sidebar component.
     Collapse state is persisted in localStorage via a $watch (no plugin required).
 --}}
+@php
+    // On bare IP deployments, tenant context is passed via ?tenant= query param.
+    // Append it to all links so navigation doesn't lose the tenant.
+$appHost = parse_url(config('app.url'), PHP_URL_HOST);
+$tenantSuffix = tenant() && filter_var($appHost, FILTER_VALIDATE_IP) ? '?tenant=' . tenant('id') : '';
+@endphp
 <div x-data="{
     collapsed: localStorage.getItem('sidebar_collapsed') === 'true',
     tenantMenuOpen: false,
@@ -11,7 +17,7 @@
 
     {{-- Sidebar Header: logo + app name + collapse toggle --}}
     <div class="flex items-center h-16 px-3 border-b border-gray-200 dark:border-gray-700">
-        <a href="{{ route('dashboard') }}" class="flex items-center gap-3 min-w-0 flex-1">
+        <a href="{{ route('dashboard') . $tenantSuffix }}" class="flex items-center gap-3 min-w-0 flex-1">
             {{-- CMS logo inlined to avoid asset() URL issues on tenant subdomains --}}
             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32.28 30.7" class="w-8 h-8 flex-shrink-0"
                 style="shape-rendering:geometricPrecision; fill-rule:evenodd; clip-rule:evenodd">
@@ -88,8 +94,13 @@
                     x-transition:leave-end="opacity-0" class="mt-1 ml-2 space-y-0.5" style="display: none;">
                     @if ($isSuperAdmin && tenant())
                         @php
-                            $centralDomain = config('tenancy.central_domains')[2] ?? 'project_cms.test';
-                            $centralUrl = request()->getScheme() . '://' . $centralDomain . '/dashboard';
+                            $appHost = parse_url(config('app.url'), PHP_URL_HOST);
+                            $centralUrl = filter_var($appHost, FILTER_VALIDATE_IP)
+                                ? config('app.url') . '/dashboard'
+                                : request()->getScheme() .
+                                    '://' .
+                                    collect(config('tenancy.central_domains'))->first(fn($d) => str_contains($d, '.')) .
+                                    '/dashboard';
                         @endphp
                         <a href="{{ $centralUrl }}"
                             class="block px-3 py-1.5 text-sm rounded-md text-gray-600 hover:bg-gray-100 hover:text-gray-900 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white transition">
@@ -112,7 +123,7 @@
     <nav class="flex-1 overflow-y-auto py-4 px-3 space-y-1">
 
         {{-- Dashboard --}}
-        <x-sidebar-nav-item href="{{ route('dashboard') }}" :active="request()->routeIs('dashboard')">
+        <x-sidebar-nav-item href="{{ route('dashboard') . $tenantSuffix }}" :active="request()->routeIs('dashboard')">
             <x-slot name="icon">
                 <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
@@ -132,6 +143,16 @@
                     </svg>
                 </x-slot>
                 {{ __('Tenants') }}
+            </x-sidebar-nav-item>
+            {{-- Roles --}}
+            <x-sidebar-nav-item href="{{ route('roles.index') }}" :active="request()->routeIs('roles.*')">
+                <x-slot name="icon">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
+                    </svg>
+                </x-slot>
+                {{ __('Roles') }}
             </x-sidebar-nav-item>
         @endif
 
@@ -237,7 +258,7 @@
 
         @if (tenant())
             {{-- Users --}}
-            <x-sidebar-nav-item href="{{ route('users.index') }}" :active="request()->routeIs('users.*')">
+            <x-sidebar-nav-item href="{{ route('users.index') . $tenantSuffix }}" :active="request()->routeIs('users.*')">
                 <x-slot name="icon">
                     <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
@@ -246,18 +267,20 @@
                 </x-slot>
                 {{ __('Users') }}
             </x-sidebar-nav-item>
+
+            {{-- Roles --}}
+            <x-sidebar-nav-item href="{{ route('roles.index') . $tenantSuffix }}" :active="request()->routeIs('roles.*')">
+                <x-slot name="icon">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
+                    </svg>
+                </x-slot>
+                {{ __('Roles') }}
+            </x-sidebar-nav-item>
         @endif
 
-        {{-- Roles --}}
-        <x-sidebar-nav-item href="{{ route('roles.index') }}" :active="request()->routeIs('roles.*')">
-            <x-slot name="icon">
-                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                        d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
-                </svg>
-            </x-slot>
-            {{ __('Roles') }}
-        </x-sidebar-nav-item>
+
 
     </nav>
 

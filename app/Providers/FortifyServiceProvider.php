@@ -55,8 +55,16 @@ class FortifyServiceProvider extends ServiceProvider
                         return redirect()->intended(config('fortify.home'));
                     }
 
+                    // On bare IP deployments, subdomains aren't possible.
+                    // Fall back to APP_URL + ?tenant= query param instead.
+                    $appHost = parse_url(config('app.url'), PHP_URL_HOST);
+                    if (filter_var($appHost, FILTER_VALIDATE_IP)) {
+                        return redirect(config('app.url') . '/dashboard?tenant=' . $tenant->id);
+                    }
+
                     $scheme = request()->getScheme();
-                    $centralDomain = config('tenancy.central_domains')[2] ?? 'project_cms.test';
+                    $centralDomain = collect(config('tenancy.central_domains'))
+                        ->first(fn ($d) => str_contains($d, '.'));
 
                     return redirect()->away("{$scheme}://{$domain}.{$centralDomain}/dashboard");
                 }

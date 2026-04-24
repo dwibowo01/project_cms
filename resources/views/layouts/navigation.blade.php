@@ -1,18 +1,22 @@
 <nav x-data="{ open: false }" class="bg-white dark:bg-gray-800 border-b border-gray-100 dark:border-gray-700">
+    @php
+        $appHost = parse_url(config('app.url'), PHP_URL_HOST);
+        $tenantSuffix = tenant() && filter_var($appHost, FILTER_VALIDATE_IP) ? '?tenant=' . tenant('id') : '';
+    @endphp
     <!-- Primary Navigation Menu -->
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div class="flex justify-between h-16">
             <div class="flex">
                 <!-- Logo -->
                 <div class="shrink-0 flex items-center">
-                    <a href="{{ route('dashboard') }}">
+                    <a href="{{ route('dashboard') . $tenantSuffix }}">
                         <x-application-logo class="block h-9 w-auto fill-current text-gray-800 dark:text-gray-200" />
                     </a>
                 </div>
 
                 <!-- Navigation Links -->
                 <div class="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
-                    <x-nav-link :href="route('dashboard')" :active="request()->routeIs('dashboard')">
+                    <x-nav-link :href="route('dashboard') . $tenantSuffix" :active="request()->routeIs('dashboard')">
                         {{ __('Dashboard') }}
                     </x-nav-link>
 
@@ -23,12 +27,12 @@
                     @endif
 
                     @if (tenant())
-                        <x-nav-link :href="route('users.index')" :active="request()->routeIs('users.*')">
+                        <x-nav-link :href="route('users.index') . $tenantSuffix" :active="request()->routeIs('users.*')">
                             {{ __('Users') }}
                         </x-nav-link>
                     @endif
 
-                    <x-nav-link :href="route('roles.index')" :active="request()->routeIs('roles.*')">
+                    <x-nav-link :href="route('roles.index') . $tenantSuffix" :active="request()->routeIs('roles.*')">
                         {{ __('Roles') }}
                     </x-nav-link>
                 </div>
@@ -63,8 +67,15 @@
                             <x-slot name="content">
                                 @if (auth()->user()->isSuperAdmin() && tenant())
                                     @php
-                                        $centralDomain = config('tenancy.central_domains')[2] ?? 'project_cms.test';
-                                        $centralUrl = request()->getScheme() . '://' . $centralDomain . '/dashboard';
+                                        $appHost = parse_url(config('app.url'), PHP_URL_HOST);
+                                        $centralUrl = filter_var($appHost, FILTER_VALIDATE_IP)
+                                            ? config('app.url') . '/dashboard'
+                                            : request()->getScheme() .
+                                                '://' .
+                                                collect(config('tenancy.central_domains'))->first(
+                                                    fn($d) => str_contains($d, '.'),
+                                                ) .
+                                                '/dashboard';
                                     @endphp
                                     <x-dropdown-link :href="$centralUrl">
                                         {{ __('Central Dashboard') }}
@@ -136,7 +147,7 @@
     <!-- Responsive Navigation Menu -->
     <div :class="{ 'block': open, 'hidden': !open }" class="hidden sm:hidden">
         <div class="pt-2 pb-3 space-y-1">
-            <x-responsive-nav-link :href="route('dashboard')" :active="request()->routeIs('dashboard')">
+            <x-responsive-nav-link :href="route('dashboard') . $tenantSuffix" :active="request()->routeIs('dashboard')">
                 {{ __('Dashboard') }}
             </x-responsive-nav-link>
 
@@ -147,12 +158,12 @@
             @endif
 
             @if (tenant())
-                <x-responsive-nav-link :href="route('users.index')" :active="request()->routeIs('users.*')">
+                <x-responsive-nav-link :href="route('users.index') . $tenantSuffix" :active="request()->routeIs('users.*')">
                     {{ __('Users') }}
                 </x-responsive-nav-link>
             @endif
 
-            <x-responsive-nav-link :href="route('roles.index')" :active="request()->routeIs('roles.*')">
+            <x-responsive-nav-link :href="route('roles.index') . $tenantSuffix" :active="request()->routeIs('roles.*')">
                 {{ __('Roles') }}
             </x-responsive-nav-link>
         </div>
@@ -177,8 +188,13 @@
                     </div>
                     @if (auth()->user()->isSuperAdmin() && tenant())
                         @php
-                            $centralDomain = config('tenancy.central_domains')[2] ?? 'project_cms.test';
-                            $centralUrl = request()->getScheme() . '://' . $centralDomain . '/dashboard';
+                            $appHost = parse_url(config('app.url'), PHP_URL_HOST);
+                            $centralUrl = filter_var($appHost, FILTER_VALIDATE_IP)
+                                ? config('app.url') . '/dashboard'
+                                : request()->getScheme() .
+                                    '://' .
+                                    collect(config('tenancy.central_domains'))->first(fn($d) => str_contains($d, '.')) .
+                                    '/dashboard';
                         @endphp
                         <x-responsive-nav-link :href="$centralUrl">
                             {{ __('Central Dashboard') }}

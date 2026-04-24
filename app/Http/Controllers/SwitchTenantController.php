@@ -25,7 +25,15 @@ class SwitchTenantController extends Controller
                 ->with('error', 'This tenant has no domain configured.');
         }
 
-        $centralDomain = config('tenancy.central_domains')[2] ?? 'project_cms.test';
+        // On bare IP deployments, subdomains are not possible.
+        // Fall back to APP_URL + ?tenant= query param instead.
+        $appHost = parse_url(config('app.url'), PHP_URL_HOST);
+        if (filter_var($appHost, FILTER_VALIDATE_IP)) {
+            return redirect(config('app.url') . '/dashboard?tenant=' . $tenant->id);
+        }
+
+        $centralDomain = collect(config('tenancy.central_domains'))
+            ->first(fn ($d) => str_contains($d, '.'));
         $scheme = $request->getScheme();
 
         return redirect()->away("{$scheme}://{$domain}.{$centralDomain}/dashboard");

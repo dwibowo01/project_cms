@@ -17,7 +17,7 @@ class CentralAppScope implements Scope
 
         if (tenancy()->initialized) {
             if ($usesTenantColumn) {
-                $builder->where($model->qualifyColumn(BelongsToTenant::$tenantIdColumn), tenant('id'));
+                $builder->where($model->qualifyColumn($model::$tenantIdColumn), tenant('id'));
             } else {
                 // Allow users who belong to this tenant OR superadmins (no tenant memberships)
                 $builder->where(function (Builder $q) {
@@ -28,7 +28,7 @@ class CentralAppScope implements Scope
             }
         } else {
             if ($usesTenantColumn) {
-                $builder->whereNull($model->qualifyColumn(BelongsToTenant::$tenantIdColumn));
+                $builder->whereNull($model->qualifyColumn($model::$tenantIdColumn));
             } else {
                 $builder->whereDoesntHave('tenants');
             }

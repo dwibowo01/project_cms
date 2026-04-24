@@ -3,8 +3,8 @@
 declare(strict_types=1);
 
 use App\Http\Controllers\UserController;
+use App\Http\Middleware\InitializeTenancyBySubDomain;
 use Illuminate\Support\Facades\Route;
-use Stancl\Tenancy\Middleware\InitializeTenancyBySubdomain;
 use Stancl\Tenancy\Middleware\PreventAccessFromCentralDomains;
 
 /*
@@ -20,7 +20,7 @@ use Stancl\Tenancy\Middleware\PreventAccessFromCentralDomains;
 */
 
 Route::middleware([
-    InitializeTenancyBySubdomain::class,
+    InitializeTenancyBySubDomain::class,
     PreventAccessFromCentralDomains::class,
 ])->group(function () {
     Route::get('/tenant', function () {
