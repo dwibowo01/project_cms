@@ -55,10 +55,10 @@ class FortifyServiceProvider extends ServiceProvider
                         return redirect()->intended(config('fortify.home'));
                     }
 
-                    // On bare IP deployments, subdomains aren't possible.
-                    // Fall back to APP_URL + ?tenant= query param instead.
+                    // On bare IP or single-label host (e.g. localhost) deployments,
+                    // subdomains aren't possible. Fall back to APP_URL + ?tenant= query param.
                     $appHost = parse_url(config('app.url'), PHP_URL_HOST);
-                    if (filter_var($appHost, FILTER_VALIDATE_IP)) {
+                    if (filter_var($appHost, FILTER_VALIDATE_IP) || !str_contains($appHost, '.')) {
                         return redirect(config('app.url') . '/dashboard?tenant=' . $tenant->id);
                     }
 

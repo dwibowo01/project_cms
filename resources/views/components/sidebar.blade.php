@@ -6,7 +6,10 @@
     // On bare IP deployments, tenant context is passed via ?tenant= query param.
     // Append it to all links so navigation doesn't lose the tenant.
 $appHost = parse_url(config('app.url'), PHP_URL_HOST);
-$tenantSuffix = tenant() && filter_var($appHost, FILTER_VALIDATE_IP) ? '?tenant=' . tenant('id') : '';
+$tenantSuffix =
+    tenant() && (filter_var($appHost, FILTER_VALIDATE_IP) || !str_contains($appHost, '.'))
+        ? '?tenant=' . tenant('id')
+        : '';
 @endphp
 <div x-data="{
     collapsed: localStorage.getItem('sidebar_collapsed') === 'true',
@@ -95,12 +98,15 @@ $tenantSuffix = tenant() && filter_var($appHost, FILTER_VALIDATE_IP) ? '?tenant=
                     @if ($isSuperAdmin && tenant())
                         @php
                             $appHost = parse_url(config('app.url'), PHP_URL_HOST);
-                            $centralUrl = filter_var($appHost, FILTER_VALIDATE_IP)
-                                ? config('app.url') . '/dashboard'
-                                : request()->getScheme() .
-                                    '://' .
-                                    collect(config('tenancy.central_domains'))->first(fn($d) => str_contains($d, '.')) .
-                                    '/dashboard';
+                            $centralUrl =
+                                filter_var($appHost, FILTER_VALIDATE_IP) || !str_contains($appHost, '.')
+                                    ? config('app.url') . '/dashboard'
+                                    : request()->getScheme() .
+                                        '://' .
+                                        collect(config('tenancy.central_domains'))->first(
+                                            fn($d) => str_contains($d, '.'),
+                                        ) .
+                                        '/dashboard';
                         @endphp
                         <a href="{{ $centralUrl }}"
                             class="block px-3 py-1.5 text-sm rounded-md text-gray-600 hover:bg-gray-100 hover:text-gray-900 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white transition">
@@ -158,7 +164,7 @@ $tenantSuffix = tenant() && filter_var($appHost, FILTER_VALIDATE_IP) ? '?tenant=
 
         @if (tenant('id') === 'docking')
             {{-- Clients --}}
-            <x-sidebar-nav-item href="" :active="request()->routeIs('')">
+            <x-sidebar-nav-item href="{{ route('clients.index') . $tenantSuffix }}" :active="request()->routeIs('clients.*')">
                 <x-slot name="icon">
                     <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"

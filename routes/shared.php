@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\LocaleController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\RoleController;
 use App\Http\Controllers\SwitchTenantController;
@@ -15,6 +16,8 @@ Route::middleware([
     Route::get('/', function () {
         return view('welcome');
     });
+
+    Route::get('/locale/{locale}', LocaleController::class)->name('locale.switch');
 
     Route::get('/dashboard', DashboardController::class)->middleware(['auth', 'verified'])->name('dashboard');
 

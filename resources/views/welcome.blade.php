@@ -20,6 +20,10 @@
 @php
     $centralDomain = collect(config('tenancy.central_domains'))->first(fn($d) => !filter_var($d, FILTER_VALIDATE_IP));
     $scheme = request()->getScheme();
+    $sliderImagePath = public_path('Website_Slider.jpg');
+    // Cache-bust so the browser picks up changes to the image file instead of serving a stale copy.
+    $sliderImage =
+        asset('Website_Slider.jpg') . (file_exists($sliderImagePath) ? '?v=' . filemtime($sliderImagePath) : '');
 @endphp
 
 <body
@@ -45,9 +49,9 @@
 
         {{-- DOCKING --}}
         <a href="{{ config('app.url') }}/login?tenant=docking"
-            style="position:absolute;inset:0;background:url('{{ asset('Website_Slider.jpg') }}') center/cover no-repeat;clip-path:polygon(0% 0%, 45.6% 0%, 15.2% 100%, 0% 100%);text-decoration:none;"
-            onmouseover="this.style.background='linear-gradient(rgba(52,169,236,0.55),rgba(52,169,236,0.55)),url({{ asset('Website_Slider.jpg') }}) center/cover no-repeat'"
-            onmouseout="this.style.background='url({{ asset('Website_Slider.jpg') }}) center/cover no-repeat'">
+            style="position:absolute;inset:0;background:url('{{ $sliderImage }}') center/cover no-repeat;clip-path:polygon(0% 0%, 45.6% 0%, 15.2% 100%, 0% 100%);text-decoration:none;"
+            onmouseover="this.style.background=&quot;linear-gradient(rgba(52,169,236,0.55),rgba(52,169,236,0.55)),url('{{ $sliderImage }}') center/cover no-repeat&quot;"
+            onmouseout="this.style.background=&quot;url('{{ $sliderImage }}') center/cover no-repeat&quot;">
             <span
                 style="position:absolute;color:#fff;font-family:'Bebas Neue',sans-serif;font-size:5vw;left:5%;top:55%;transform:translateY(-50%);letter-spacing:0.05em;pointer-events:none;">
                 DOCKING
@@ -56,9 +60,9 @@
 
         {{-- NEW BUILDING --}}
         <a href="{{ config('app.url') }}/login?tenant=new-building"
-            style="position:absolute;inset:0;background:url('{{ asset('Website_Slider.jpg') }}') center/cover no-repeat;clip-path:polygon(47.2% 0%, 83.3% 0%, 52.9% 100%, 16.8% 100%);text-decoration:none;"
-            onmouseover="this.style.background='linear-gradient(rgba(52,169,236,0.55),rgba(52,169,236,0.55)),url({{ asset('Website_Slider.jpg') }}) center/cover no-repeat'"
-            onmouseout="this.style.background='url({{ asset('Website_Slider.jpg') }}) center/cover no-repeat'">
+            style="position:absolute;inset:0;background:url('{{ $sliderImage }}') center/cover no-repeat;clip-path:polygon(47.2% 0%, 83.3% 0%, 52.9% 100%, 16.8% 100%);text-decoration:none;"
+            onmouseover="this.style.background=&quot;linear-gradient(rgba(52,169,236,0.55),rgba(52,169,236,0.55)),url('{{ $sliderImage }}') center/cover no-repeat&quot;"
+            onmouseout="this.style.background=&quot;url('{{ $sliderImage }}') center/cover no-repeat&quot;">
             <span
                 style="position:absolute;color:#fff;font-family:'Bebas Neue',sans-serif;font-size:5vw;left:38%;top:55%;transform:translateY(-50%);letter-spacing:0.05em;pointer-events:none;">
                 NEW BUILDING
@@ -74,9 +78,9 @@
 
         {{-- SITE --}}
         <a href="{{ config('app.url') }}/login?tenant=site"
-            style="position:absolute;inset:0;background:url('{{ asset('Website_Slider.jpg') }}') center/cover no-repeat;clip-path:polygon(84.8% 0%, 100% 0%, 100% 100%, 54.4% 100%);text-decoration:none;"
-            onmouseover="this.style.background='linear-gradient(rgba(52,169,236,0.55),rgba(52,169,236,0.55)),url({{ asset('Website_Slider.jpg') }}) center/cover no-repeat'"
-            onmouseout="this.style.background='url({{ asset('Website_Slider.jpg') }}) center/cover no-repeat'">
+            style="position:absolute;inset:0;background:url('{{ $sliderImage }}') center/cover no-repeat;clip-path:polygon(84.8% 0%, 100% 0%, 100% 100%, 54.4% 100%);text-decoration:none;"
+            onmouseover="this.style.background=&quot;linear-gradient(rgba(52,169,236,0.55),rgba(52,169,236,0.55)),url('{{ $sliderImage }}') center/cover no-repeat&quot;"
+            onmouseout="this.style.background=&quot;url('{{ $sliderImage }}') center/cover no-repeat&quot;">
             <span
                 style="position:absolute;color:#fff;font-family:'Bebas Neue',sans-serif;font-size:5vw;left:80%;top:55%;transform:translateY(-50%);letter-spacing:0.05em;pointer-events:none;">
                 SITE

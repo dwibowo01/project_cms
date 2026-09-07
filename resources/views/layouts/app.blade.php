@@ -74,6 +74,9 @@
                     {{-- Theme Switcher --}}
                     <x-theme-switcher />
 
+                    {{-- Language Switcher --}}
+                    <x-language-switcher />
+
                     {{-- User Profile Dropdown --}}
                     <x-dropdown align="right" width="48">
                         <x-slot name="trigger">

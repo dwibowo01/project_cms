@@ -24,7 +24,13 @@ return Application::configure(basePath: dirname(__DIR__))
         }
     )
     ->withMiddleware(function (Middleware $middleware): void {
-        //
+        $middleware->web(append: [
+            \App\Http\Middleware\SetLocale::class,
+        ]);
+
+        // Left unencrypted: read/written directly by InitializeTenancyBySubDomain,
+        // which runs before the encrypt-cookies middleware.
+        $middleware->encryptCookies(except: ['active_tenant']);
     })
     ->withExceptions(function (Exceptions $exceptions): void {
         //

@@ -18,7 +18,7 @@ return [
     'central_domains' => [
         '127.0.0.1',
         'localhost',
-        'project_cms.test',
+        'project_cms',
     ],
 
     /**
@@ -135,8 +135,13 @@ return [
          * packages that use asset() calls inside the tenant app. To avoid such issues, you can
          * disable asset() helper tenancy and explicitly use tenant_asset() calls in places
          * where you want to use tenant-specific assets (product images, avatars, etc).
+         *
+         * Disabled: this app serves shared assets straight from public/ via asset(), and the
+         * tenant asset route only supports real domain-based identification (not the ?tenant=
+         * query/cookie fallback used for bare IP/localhost), which caused public asset() calls
+         * to 500 once a tenant was active.
          */
-        'asset_helper_tenancy' => true,
+        'asset_helper_tenancy' => false,
     ],
 
     /**

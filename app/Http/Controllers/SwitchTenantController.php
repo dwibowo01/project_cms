@@ -25,10 +25,10 @@ class SwitchTenantController extends Controller
                 ->with('error', 'This tenant has no domain configured.');
         }
 
-        // On bare IP deployments, subdomains are not possible.
+        // On bare IP or localhost deployments, subdomains are not possible.
         // Fall back to APP_URL + ?tenant= query param instead.
         $appHost = parse_url(config('app.url'), PHP_URL_HOST);
-        if (filter_var($appHost, FILTER_VALIDATE_IP)) {
+        if (filter_var($appHost, FILTER_VALIDATE_IP) || !str_contains($appHost, '.')) {
             return redirect(config('app.url') . '/dashboard?tenant=' . $tenant->id);
         }
 
