@@ -6,6 +6,7 @@ use App\Models\Scopes\CentralAppScope;
 use Illuminate\Database\Eloquent\Attributes\ScopedBy;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Stancl\Tenancy\Database\Concerns\BelongsToTenant;
 
 #[ScopedBy(CentralAppScope::class)]
@@ -50,5 +51,10 @@ class Client extends Model
         $last = (int) static::query()->orderByDesc('id')->value('client_no');
 
         return str_pad((string) ($last + 1), 4, '0', STR_PAD_LEFT);
+    }
+
+    public function contacts(): HasMany
+    {
+        return $this->hasMany(ClientContact::class);
     }
 }

@@ -2,6 +2,7 @@
 
 declare(strict_types=1);
 
+use App\Http\Controllers\ClientContactController;
 use App\Http\Controllers\ClientController;
 use App\Http\Controllers\UserController;
 use App\Http\Middleware\InitializeTenancyBySubDomainWithCookieFallback;
@@ -29,4 +30,7 @@ Route::middleware([
     });
     Route::resource('users', UserController::class)->middleware(['auth', 'verified']);
     Route::resource('clients', ClientController::class)->middleware(['auth', 'verified']);
+    Route::resource('clients.contacts', ClientContactController::class)
+        ->except('show')
+        ->middleware(['auth', 'verified']);
 });

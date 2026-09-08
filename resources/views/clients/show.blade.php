@@ -13,6 +13,15 @@
                     </svg>
                     {{ __('Back to List') }}
                 </a>
+                {{-- <a href="{{ route('clients.contacts.index', $client) }}"
+                    class="inline-flex items-center px-4 py-2 bg-white dark:bg-gray-700 border border-gray-300 dark:border-gray-600 rounded-md font-semibold text-xs text-gray-700 dark:text-gray-300 uppercase tracking-widest shadow-sm hover:bg-gray-50 dark:hover:bg-gray-600 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 dark:focus:ring-offset-gray-800 transition ease-in-out duration-150">
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
+                        stroke="currentColor" class="w-4 h-4 mr-2">
+                        <path stroke-linecap="round" stroke-linejoin="round"
+                            d="M15 19.128a9.38 9.38 0 002.625.372 9.337 9.337 0 004.121-.952 4.125 4.125 0 00-7.533-2.493M15 19.128v-.003c0-1.113-.285-2.16-.786-3.07M15 19.128v.106A12.318 12.318 0 018.624 21c-2.331 0-4.512-.645-6.374-1.766l-.001-.109a6.375 6.375 0 0111.964-3.07M12 6.375a3.375 3.375 0 11-6.75 0 3.375 3.375 0 016.75 0zm8.25 2.25a2.625 2.625 0 11-5.25 0 2.625 2.625 0 015.25 0z" />
+                    </svg>
+                    {{ __('Contacts') }}
+                </a> --}}
                 <a href="{{ route('clients.edit', $client) }}"
                     class="inline-flex items-center px-4 py-2 bg-gray-800 dark:bg-gray-200 border border-transparent rounded-md font-semibold text-xs text-white dark:text-gray-800 uppercase tracking-widest hover:bg-gray-700 dark:hover:bg-white focus:bg-gray-700 dark:focus:bg-white active:bg-gray-900 dark:active:bg-gray-300 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 dark:focus:ring-offset-gray-800 transition ease-in-out duration-150">
                     <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
@@ -151,11 +160,6 @@
                         </div>
 
                         <div>
-                            <dt class="text-sm font-medium text-gray-500 dark:text-gray-400">{{ __('Country') }}</dt>
-                            <dd class="mt-1 text-gray-900 dark:text-gray-100">{{ $client->country ?? '-' }}</dd>
-                        </div>
-
-                        <div>
                             <dt class="text-sm font-medium text-gray-500 dark:text-gray-400">{{ __('State') }}</dt>
                             <dd class="mt-1 text-gray-900 dark:text-gray-100">{{ $client->state ?? '-' }}</dd>
                         </div>
@@ -169,6 +173,11 @@
                             <dt class="text-sm font-medium text-gray-500 dark:text-gray-400">
                                 {{ __('Postal Code') }}</dt>
                             <dd class="mt-1 text-gray-900 dark:text-gray-100">{{ $client->postal_code ?? '-' }}</dd>
+                        </div>
+
+                        <div>
+                            <dt class="text-sm font-medium text-gray-500 dark:text-gray-400">{{ __('Country') }}</dt>
+                            <dd class="mt-1 text-gray-900 dark:text-gray-100">{{ $client->country ?? '-' }}</dd>
                         </div>
 
                         <div>
@@ -190,6 +199,83 @@
                         <dd class="mt-1 text-gray-900 dark:text-gray-100 whitespace-pre-line">
                             {{ $client->notes ?? '-' }}</dd>
                     </div>
+                </div>
+            </div>
+
+            <!-- Contacts Card -->
+            <div class="bg-white dark:bg-gray-800 overflow-hidden shadow-sm sm:rounded-lg">
+                <div class="p-6 sm:p-8">
+                    <div class="flex items-center justify-between mb-6">
+                        <div class="flex items-center gap-4">
+                            <div class="p-3 bg-blue-100 dark:bg-blue-900/30 rounded-lg">
+                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
+                                    stroke-width="1.5" stroke="currentColor"
+                                    class="w-6 h-6 text-blue-600 dark:text-blue-400">
+                                    <path stroke-linecap="round" stroke-linejoin="round"
+                                        d="M15 19.128a9.38 9.38 0 002.625.372 9.337 9.337 0 004.121-.952 4.125 4.125 0 00-7.533-2.493M15 19.128v-.003c0-1.113-.285-2.16-.786-3.07M15 19.128v.106A12.318 12.318 0 018.624 21c-2.331 0-4.512-.645-6.374-1.766l-.001-.109a6.375 6.375 0 0111.964-3.07M12 6.375a3.375 3.375 0 11-6.75 0 3.375 3.375 0 016.75 0zm8.25 2.25a2.625 2.625 0 11-5.25 0 2.625 2.625 0 015.25 0z" />
+                                </svg>
+                            </div>
+                            <div>
+                                <h3 class="text-lg font-medium text-gray-900 dark:text-gray-100">
+                                    {{ __('Contacts') }}
+                                </h3>
+                                <p class="text-sm text-gray-600 dark:text-gray-400">
+                                    {{ __('People to contact for this client') }}
+                                </p>
+                            </div>
+                        </div>
+                        <a href="{{ route('clients.contacts.create', $client) }}"
+                            class="inline-flex items-center px-4 py-2 bg-gray-800 dark:bg-gray-200 border border-transparent rounded-md font-semibold text-xs text-white dark:text-gray-800 uppercase tracking-widest hover:bg-gray-700 dark:hover:bg-white focus:bg-gray-700 dark:focus:bg-white active:bg-gray-900 dark:active:bg-gray-300 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 dark:focus:ring-offset-gray-800 transition ease-in-out duration-150">
+                            {{ __('Add Contact') }}
+                        </a>
+                    </div>
+
+                    @if ($contacts->isNotEmpty())
+                        <div class="overflow-x-auto">
+                            <table
+                                class="w-full border-collapse bg-white dark:bg-gray-800 text-left text-sm text-gray-500 dark:text-gray-400">
+                                <thead class="bg-gray-50 dark:bg-gray-700">
+                                    <tr>
+                                        <th scope="col"
+                                            class="px-4 py-3 font-medium text-gray-900 dark:text-gray-100">
+                                            {{ __('Name') }}</th>
+                                        <th scope="col"
+                                            class="px-4 py-3 font-medium text-gray-900 dark:text-gray-100">
+                                            {{ __('Position') }}</th>
+                                        <th scope="col"
+                                            class="px-4 py-3 font-medium text-gray-900 dark:text-gray-100">
+                                            {{ __('Phone Number') }}</th>
+                                        <th scope="col"
+                                            class="px-4 py-3 font-medium text-gray-900 dark:text-gray-100">
+                                            {{ __('Email') }}</th>
+                                        <th scope="col"
+                                            class="px-4 py-3 font-medium text-gray-900 dark:text-gray-100"></th>
+                                    </tr>
+                                </thead>
+                                <tbody
+                                    class="divide-y divide-gray-100 dark:divide-gray-700 border-t border-gray-100 dark:border-gray-700">
+                                    @foreach ($contacts as $contact)
+                                        <tr class="hover:bg-gray-50 dark:hover:bg-gray-700/50">
+                                            <th class="px-4 py-3 font-normal text-gray-900 dark:text-gray-100">
+                                                {{ $contact->name }}</th>
+                                            <td class="px-4 py-3">{{ $contact->position ?? '-' }}</td>
+                                            <td class="px-4 py-3">{{ $contact->phone_number ?? '-' }}</td>
+                                            <td class="px-4 py-3">{{ $contact->email ?? '-' }}</td>
+                                            <td class="px-4 py-3">
+                                                <a href="{{ route('clients.contacts.edit', [$client, $contact]) }}"
+                                                    class="text-indigo-600 hover:text-indigo-900 dark:text-indigo-400 dark:hover:text-indigo-300"
+                                                    title="{{ __('Edit') }}">
+                                                    {{ __('Edit') }}
+                                                </a>
+                                            </td>
+                                        </tr>
+                                    @endforeach
+                                </tbody>
+                            </table>
+                        </div>
+                    @else
+                        <p class="text-sm text-gray-500 dark:text-gray-400">{{ __('No contacts') }}</p>
+                    @endif
                 </div>
             </div>
         </div>

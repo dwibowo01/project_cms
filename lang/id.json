@@ -205,5 +205,21 @@
     "Others": "Lainnya",
     "Client created successfully.": "Klien berhasil dibuat.",
     "Client updated successfully.": "Klien berhasil diperbarui.",
-    "Client deleted successfully.": "Klien berhasil dihapus."
+    "Client deleted successfully.": "Klien berhasil dihapus.",
+    "Contacts": "Kontak",
+    "People to contact for this client": "Orang yang dapat dihubungi untuk klien ini",
+    "Back to Client": "Kembali ke Klien",
+    "Add Contact": "Tambah Kontak",
+    "Position": "Jabatan",
+    "No contacts": "Tidak ada kontak",
+    "Get started by adding a new contact.": "Mulai dengan menambahkan kontak baru.",
+    "Add your first contact": "Tambahkan kontak pertama Anda",
+    "Edit Contact": "Ubah Kontak",
+    "Update Contact": "Perbarui Kontak",
+    "Are you sure you want to delete this contact?": "Apakah Anda yakin ingin menghapus kontak ini?",
+    "This contact will be permanently deleted. This action cannot be undone.": "Kontak ini akan dihapus secara permanen. Tindakan ini tidak dapat dibatalkan.",
+    "Delete Contact": "Hapus Kontak",
+    "Contact created successfully.": "Kontak berhasil dibuat.",
+    "Contact updated successfully.": "Kontak berhasil diperbarui.",
+    "Contact deleted successfully.": "Kontak berhasil dihapus."
 }
