@@ -57,9 +57,9 @@ class FortifyServiceProvider extends ServiceProvider
 
                     // On bare IP or single-label host (e.g. localhost) deployments,
                     // subdomains aren't possible. Fall back to APP_URL + ?tenant= query param.
-                    $appHost = parse_url(config('app.url'), PHP_URL_HOST);
+                    $appHost = $request->getHost();
                     if (filter_var($appHost, FILTER_VALIDATE_IP) || !str_contains($appHost, '.')) {
-                        return redirect(config('app.url') . '/dashboard?tenant=' . $tenant->id);
+                        return redirect($request->root() . '/dashboard?tenant=' . $tenant->id);
                     }
 
                     $scheme = request()->getScheme();

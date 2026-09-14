@@ -6,6 +6,8 @@ use App\Http\Controllers\ClientContactController;
 use App\Http\Controllers\ClientController;
 use App\Http\Controllers\MasterItemCategoryController;
 use App\Http\Controllers\MasterItemController;
+use App\Http\Controllers\QuotationController;
+use App\Http\Controllers\QuotationItemController;
 use App\Http\Controllers\ShipController;
 use App\Http\Controllers\UserController;
 use App\Http\Middleware\InitializeTenancyBySubDomainWithCookieFallback;
@@ -42,5 +44,15 @@ Route::middleware([
         ->middleware(['auth', 'verified']);
     Route::resource('master-item-categories', MasterItemCategoryController::class)
         ->only(['index', 'store', 'update', 'destroy'])
+        ->middleware(['auth', 'verified']);
+    Route::get('quotations/{quotation}/export', [QuotationController::class, 'export'])
+        ->name('quotations.export')
+        ->middleware(['auth', 'verified']);
+    Route::post('quotations/{quotation}/revise', [QuotationController::class, 'revise'])
+        ->name('quotations.revise')
+        ->middleware(['auth', 'verified']);
+    Route::resource('quotations', QuotationController::class)->middleware(['auth', 'verified']);
+    Route::resource('quotations.items', QuotationItemController::class)
+        ->only(['create', 'store', 'edit', 'update', 'destroy'])
         ->middleware(['auth', 'verified']);
 });

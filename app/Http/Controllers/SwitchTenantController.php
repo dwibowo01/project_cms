@@ -27,9 +27,9 @@ class SwitchTenantController extends Controller
 
         // On bare IP or localhost deployments, subdomains are not possible.
         // Fall back to APP_URL + ?tenant= query param instead.
-        $appHost = parse_url(config('app.url'), PHP_URL_HOST);
+        $appHost = $request->getHost();
         if (filter_var($appHost, FILTER_VALIDATE_IP) || !str_contains($appHost, '.')) {
-            return redirect(config('app.url') . '/dashboard?tenant=' . $tenant->id);
+            return redirect($request->root() . '/dashboard?tenant=' . $tenant->id);
         }
 
         $centralDomain = collect(config('tenancy.central_domains'))

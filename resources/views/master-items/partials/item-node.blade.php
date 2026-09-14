@@ -4,9 +4,10 @@
 
 <tr class="hover:bg-gray-50 dark:hover:bg-gray-700/50">
     <th scope="row" class="px-4 py-3 font-normal text-gray-900 dark:text-gray-100 align-top">
-        <span style="padding-left: {{ $indentPx }}px" class="inline-block">
-            <span class="font-medium">{{ $item->code }}.</span> {{ $item->name }}
-        </span>
+        <div class="flex" style="padding-left: {{ $indentPx }}px">
+            <span class="font-medium mr-1">{{ $item->code }}.</span>
+            <span class="flex-1 min-w-0">{{ $item->name }}</span>
+        </div>
     </th>
     <td class="px-4 py-3 align-top whitespace-nowrap">{{ $item->qty ?? '-' }}</td>
     <td class="px-4 py-3 align-top whitespace-nowrap">{{ $item->unit ?? '-' }}</td>
