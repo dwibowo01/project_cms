@@ -1,3 +1,12 @@
+@php
+    // On bare IP/localhost deployments, tenant context is passed via ?tenant= query param.
+    // Append it to all action links so they don't lose the tenant context that resolved this role.
+$appHost = parse_url(config('app.url'), PHP_URL_HOST);
+$tenantSuffix =
+    tenant() && (filter_var($appHost, FILTER_VALIDATE_IP) || !str_contains($appHost, '.'))
+        ? '?tenant=' . tenant('id')
+        : '';
+@endphp
 <x-app-layout>
     <x-slot name="header">
         <div class="flex justify-between items-center">
@@ -5,7 +14,7 @@
                 {{ __('Role Details') }}: {{ $role->name }}
             </h2>
             <div class="flex gap-3">
-                <a href="{{ route('roles.index') }}"
+                <a href="{{ route('roles.index') . $tenantSuffix }}"
                     class="inline-flex items-center px-4 py-2 bg-white dark:bg-gray-700 border border-gray-300 dark:border-gray-600 rounded-md font-semibold text-xs text-gray-700 dark:text-gray-300 uppercase tracking-widest shadow-sm hover:bg-gray-50 dark:hover:bg-gray-600 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 dark:focus:ring-offset-gray-800 transition ease-in-out duration-150">
                     <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
                         stroke="currentColor" class="w-4 h-4 mr-2">
@@ -13,7 +22,7 @@
                     </svg>
                     {{ __('Back to Roles') }}
                 </a>
-                <a href="{{ route('roles.edit', $role) }}"
+                <a href="{{ route('roles.edit', $role) . $tenantSuffix }}"
                     class="inline-flex items-center px-4 py-2 bg-gray-800 dark:bg-gray-200 border border-transparent rounded-md font-semibold text-xs text-white dark:text-gray-800 uppercase tracking-widest hover:bg-gray-700 dark:hover:bg-white focus:bg-gray-700 dark:focus:bg-white active:bg-gray-900 dark:active:bg-gray-300 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 dark:focus:ring-offset-gray-800 transition ease-in-out duration-150">
                     <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
                         stroke="currentColor" class="w-4 h-4 mr-2">
@@ -65,34 +74,41 @@
                         <div>
                             <dt class="text-sm font-medium text-gray-500 dark:text-gray-400">{{ __('Role Name') }}</dt>
                             <dd class="mt-1">
-                                <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-purple-100 dark:bg-purple-900/30 text-purple-800 dark:text-purple-200">
+                                <span
+                                    class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-purple-100 dark:bg-purple-900/30 text-purple-800 dark:text-purple-200">
                                     {{ $role->name }}
                                 </span>
                             </dd>
                         </div>
 
                         <div>
-                            <dt class="text-sm font-medium text-gray-500 dark:text-gray-400">{{ __('Guard Name') }}</dt>
+                            <dt class="text-sm font-medium text-gray-500 dark:text-gray-400">{{ __('Guard Name') }}
+                            </dt>
                             <dd class="mt-1">
-                                <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-gray-100 dark:bg-gray-700 text-gray-800 dark:text-gray-200">
+                                <span
+                                    class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-gray-100 dark:bg-gray-700 text-gray-800 dark:text-gray-200">
                                     {{ $role->guard_name }}
                                 </span>
                             </dd>
                         </div>
 
                         <div>
-                            <dt class="text-sm font-medium text-gray-500 dark:text-gray-400">{{ __('Users Count') }}</dt>
+                            <dt class="text-sm font-medium text-gray-500 dark:text-gray-400">{{ __('Users Count') }}
+                            </dt>
                             <dd class="mt-1">
-                                <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-blue-100 dark:bg-blue-900/30 text-blue-800 dark:text-blue-200">
+                                <span
+                                    class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-blue-100 dark:bg-blue-900/30 text-blue-800 dark:text-blue-200">
                                     {{ $role->users->count() }} {{ __('users') }}
                                 </span>
                             </dd>
                         </div>
 
                         <div>
-                            <dt class="text-sm font-medium text-gray-500 dark:text-gray-400">{{ __('Permissions Count') }}</dt>
+                            <dt class="text-sm font-medium text-gray-500 dark:text-gray-400">
+                                {{ __('Permissions Count') }}</dt>
                             <dd class="mt-1">
-                                <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-emerald-100 dark:bg-emerald-900/30 text-emerald-800 dark:text-emerald-200">
+                                <span
+                                    class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-emerald-100 dark:bg-emerald-900/30 text-emerald-800 dark:text-emerald-200">
                                     {{ $role->permissions->count() }} {{ __('permissions') }}
                                 </span>
                             </dd>
@@ -106,7 +122,8 @@
                         </div>
 
                         <div>
-                            <dt class="text-sm font-medium text-gray-500 dark:text-gray-400">{{ __('Last Updated') }}</dt>
+                            <dt class="text-sm font-medium text-gray-500 dark:text-gray-400">{{ __('Last Updated') }}
+                            </dt>
                             <dd class="mt-1 text-sm text-gray-900 dark:text-gray-100">
                                 {{ $role->updated_at->toDayDateTimeString() }}
                             </dd>

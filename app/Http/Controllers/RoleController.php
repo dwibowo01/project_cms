@@ -31,7 +31,8 @@ class RoleController extends Controller implements HasMiddleware
         return view('roles.index', [
             'roles' => Role::with(['permissions'])
                 ->withCount('users')
-                ->paginate(),
+                ->paginate()
+                ->withQueryString(),
         ]);
     }
 

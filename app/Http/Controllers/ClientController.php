@@ -63,6 +63,7 @@ class ClientController extends Controller
         return view('clients.show', [
             'client' => $client,
             'contacts' => $client->contacts()->latest()->get(),
+            'ships' => $client->ships()->latest()->get(),
         ]);
     }
 

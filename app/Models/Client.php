@@ -57,4 +57,9 @@ class Client extends Model
     {
         return $this->hasMany(ClientContact::class);
     }
+
+    public function ships(): HasMany
+    {
+        return $this->hasMany(Ship::class);
+    }
 }

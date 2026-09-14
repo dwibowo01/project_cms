@@ -31,6 +31,8 @@ class DatabaseSeeder extends Seeder
 
         $this->call(TenantSeeder::class);
         $this->call(RoleSeeder::class);
+        $this->call(MasterItemCategoriesSeeder::class);
+        $this->call(MasterItemsSeeder::class);
 
         $tenantUsers = [
             [

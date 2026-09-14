@@ -114,7 +114,11 @@
     </div>
 
     <div class="grid grid-cols-1 sm:grid-cols-2 gap-6 mb-6">
-
+        <div>
+            <x-input-label for="city" :value="__('City')" />
+            <x-text-input id="city" class="block mt-1 w-full" type="text" name="city" :value="old('city', $client->city ?? '')" />
+            <x-input-error :messages="$errors->get('city')" class="mt-2" />
+        </div>
         <div>
             <x-input-label for="state" :value="__('State')" />
             <x-text-input id="state" class="block mt-1 w-full" type="text" name="state" :value="old('state', $client->state ?? '')" />
@@ -123,12 +127,6 @@
     </div>
 
     <div class="grid grid-cols-1 sm:grid-cols-2 gap-6 mb-6">
-        <div>
-            <x-input-label for="city" :value="__('City')" />
-            <x-text-input id="city" class="block mt-1 w-full" type="text" name="city" :value="old('city', $client->city ?? '')" />
-            <x-input-error :messages="$errors->get('city')" class="mt-2" />
-        </div>
-
         <div>
             <x-input-label for="country" :value="__('Country')" />
             <x-text-input id="country" class="block mt-1 w-full" type="text" name="country" :value="old('country', $client->country ?? '')" />

@@ -203,6 +203,19 @@ $tenantSuffix =
                     class="mt-1 ml-4 pl-3 border-l border-gray-200 dark:border-gray-700 space-y-0.5"
                     style="display: none;">
 
+                    {{-- Master Item --}}
+                    <a href="{{ route('master-items.index') . $tenantSuffix }}"
+                        class="flex items-center gap-3 px-3 py-2 rounded-lg text-sm font-medium transition-all duration-150
+                               {{ request()->routeIs('master-items.*')
+                                   ? 'bg-gray-100 text-gray-900 dark:bg-gray-700 dark:text-white'
+                                   : 'text-gray-600 hover:bg-gray-100 hover:text-gray-900 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white' }}">
+                        <svg class="w-4 h-4 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M4 6h16M4 10h16M4 14h10M4 18h10" />
+                        </svg>
+                        {{ __('Master Item') }}
+                    </a>
+
                     {{-- Quotation --}}
                     <a href=""
                         class="flex items-center gap-3 px-3 py-2 rounded-lg text-sm font-medium transition-all duration-150
@@ -259,6 +272,17 @@ $tenantSuffix =
                     </svg>
                 </x-slot>
                 {{ __('Project Management') }}
+            </x-sidebar-nav-item>
+
+            {{-- Ship Database --}}
+            <x-sidebar-nav-item href="{{ route('ships.index') . $tenantSuffix }}" :active="request()->routeIs('ships.*')">
+                <x-slot name="icon">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M3 17l2-2h14l2 2-2 2H5l-2-2zm2-2V8h14v7m-9-7V5h4v3m-9 9v2m14-2v2" />
+                    </svg>
+                </x-slot>
+                {{ __('Ship Database') }}
             </x-sidebar-nav-item>
         @endif
 

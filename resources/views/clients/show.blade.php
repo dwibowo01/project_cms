@@ -278,6 +278,79 @@
                     @endif
                 </div>
             </div>
+
+            <!-- Ships Card -->
+            <div class="bg-white dark:bg-gray-800 overflow-hidden shadow-sm sm:rounded-lg">
+                <div class="p-6 sm:p-8">
+                    <div class="flex items-center justify-between mb-6">
+                        <div class="flex items-center gap-4">
+                            <div class="p-3 bg-blue-100 dark:bg-blue-900/30 rounded-lg">
+                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
+                                    stroke-width="1.5" stroke="currentColor"
+                                    class="w-6 h-6 text-blue-600 dark:text-blue-400">
+                                    <path stroke-linecap="round" stroke-linejoin="round"
+                                        d="M3 17l2-2h14l2 2-2 2H5l-2-2zm2-2V8h14v7m-9-7V5h4v3m-9 9v2m14-2v2" />
+                                </svg>
+                            </div>
+                            <div>
+                                <h3 class="text-lg font-medium text-gray-900 dark:text-gray-100">
+                                    {{ __('Ships') }}
+                                </h3>
+                                <p class="text-sm text-gray-600 dark:text-gray-400">
+                                    {{ __('Ships owned by this client') }}
+                                </p>
+                            </div>
+                        </div>
+                        <a href="{{ route('ships.create') }}"
+                            class="inline-flex items-center px-4 py-2 bg-gray-800 dark:bg-gray-200 border border-transparent rounded-md font-semibold text-xs text-white dark:text-gray-800 uppercase tracking-widest hover:bg-gray-700 dark:hover:bg-white focus:bg-gray-700 dark:focus:bg-white active:bg-gray-900 dark:active:bg-gray-300 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 dark:focus:ring-offset-gray-800 transition ease-in-out duration-150">
+                            {{ __('Add Ship') }}
+                        </a>
+                    </div>
+
+                    @if ($ships->isNotEmpty())
+                        <div class="overflow-x-auto">
+                            <table
+                                class="w-full border-collapse bg-white dark:bg-gray-800 text-left text-sm text-gray-500 dark:text-gray-400">
+                                <thead class="bg-gray-50 dark:bg-gray-700">
+                                    <tr>
+                                        <th scope="col"
+                                            class="px-4 py-3 font-medium text-gray-900 dark:text-gray-100">
+                                            {{ __('Ship Name') }}</th>
+                                        <th scope="col"
+                                            class="px-4 py-3 font-medium text-gray-900 dark:text-gray-100">
+                                            {{ __('Ship Type') }}</th>
+                                        <th scope="col"
+                                            class="px-4 py-3 font-medium text-gray-900 dark:text-gray-100">
+                                            {{ __('LOA') }}</th>
+                                        <th scope="col"
+                                            class="px-4 py-3 font-medium text-gray-900 dark:text-gray-100"></th>
+                                    </tr>
+                                </thead>
+                                <tbody
+                                    class="divide-y divide-gray-100 dark:divide-gray-700 border-t border-gray-100 dark:border-gray-700">
+                                    @foreach ($ships as $ship)
+                                        <tr class="hover:bg-gray-50 dark:hover:bg-gray-700/50">
+                                            <th class="px-4 py-3 font-normal text-gray-900 dark:text-gray-100">
+                                                {{ $ship->ship_name }}</th>
+                                            <td class="px-4 py-3">{{ $ship->ship_type }}</td>
+                                            <td class="px-4 py-3">{{ $ship->loa_value }} {{ $ship->loa_unit }}</td>
+                                            <td class="px-4 py-3">
+                                                <a href="{{ route('ships.show', $ship) }}"
+                                                    class="text-indigo-600 hover:text-indigo-900 dark:text-indigo-400 dark:hover:text-indigo-300"
+                                                    title="{{ __('View') }}">
+                                                    {{ __('View') }}
+                                                </a>
+                                            </td>
+                                        </tr>
+                                    @endforeach
+                                </tbody>
+                            </table>
+                        </div>
+                    @else
+                        <p class="text-sm text-gray-500 dark:text-gray-400">{{ __('No ships') }}</p>
+                    @endif
+                </div>
+            </div>
         </div>
     </div>
 

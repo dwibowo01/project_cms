@@ -1,5 +1,5 @@
 <x-modal name="confirm-role-deletion-{{ $role->id }}" :show="$errors->{$role->id}->isNotEmpty()" focusable>
-    <form method="post" action="{{ route('roles.destroy', $role) }}" class="p-6">
+    <form method="post" action="{{ route('roles.destroy', $role) . ($tenantSuffix ?? '') }}" class="p-6">
         @csrf
         @method('delete')
 
@@ -22,10 +22,13 @@
                     </h3>
                     <div class="mt-2 text-sm text-red-700 dark:text-red-300">
                         <ul class="list-disc list-inside space-y-1">
-                            <li>{{ __('This role has :count permission(s) assigned', ['count' => $role->permissions->count()]) }}</li>
-                            <li>{{ __('This role is assigned to :count user(s)', ['count' => $role->users_count]) }}</li>
-                            @if($role->users_count > 0)
-                                <li class="font-medium">{{ __('Users with this role will lose their permissions!') }}</li>
+                            <li>{{ __('This role has :count permission(s) assigned', ['count' => $role->permissions->count()]) }}
+                            </li>
+                            <li>{{ __('This role is assigned to :count user(s)', ['count' => $role->users_count]) }}
+                            </li>
+                            @if ($role->users_count > 0)
+                                <li class="font-medium">{{ __('Users with this role will lose their permissions!') }}
+                                </li>
                             @endif
                         </ul>
                     </div>
@@ -37,8 +40,9 @@
             {{ __('Once this role is deleted, all of its resources and data will be permanently deleted. This action cannot be undone.') }}
         </p>
 
-        @if($role->users_count > 0)
-            <div class="mt-4 p-3 bg-yellow-50 dark:bg-yellow-900/20 border border-yellow-200 dark:border-yellow-800 rounded-md">
+        @if ($role->users_count > 0)
+            <div
+                class="mt-4 p-3 bg-yellow-50 dark:bg-yellow-900/20 border border-yellow-200 dark:border-yellow-800 rounded-md">
                 <div class="flex">
                     <div class="flex-shrink-0">
                         <svg class="h-5 w-5 text-yellow-400" viewBox="0 0 20 20" fill="currentColor">
@@ -64,7 +68,7 @@
                 {{ __('Cancel') }}
             </x-secondary-button>
 
-            @if($role->users_count === 0)
+            @if ($role->users_count === 0)
                 <x-danger-button class="ml-3">
                     {{ __('Delete Role') }}
                 </x-danger-button>

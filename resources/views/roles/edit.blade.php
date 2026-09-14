@@ -1,3 +1,12 @@
+@php
+    // On bare IP/localhost deployments, tenant context is passed via ?tenant= query param.
+    // Append it to all action links so they don't lose the tenant context that resolved this role.
+$appHost = parse_url(config('app.url'), PHP_URL_HOST);
+$tenantSuffix =
+    tenant() && (filter_var($appHost, FILTER_VALIDATE_IP) || !str_contains($appHost, '.'))
+        ? '?tenant=' . tenant('id')
+        : '';
+@endphp
 <x-app-layout>
     <x-slot name="header">
         <div class="flex justify-between items-center">
@@ -5,7 +14,7 @@
                 {{ __('Edit Role') }}: {{ $role->name }}
             </h2>
             <div class="flex gap-3">
-                <a href="{{ route('roles.index') }}"
+                <a href="{{ route('roles.index') . $tenantSuffix }}"
                     class="inline-flex items-center px-4 py-2 bg-white dark:bg-gray-700 border border-gray-300 dark:border-gray-600 rounded-md font-semibold text-xs text-gray-700 dark:text-gray-300 uppercase tracking-widest shadow-sm hover:bg-gray-50 dark:hover:bg-gray-600 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 dark:focus:ring-offset-gray-800 transition ease-in-out duration-150">
                     <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
                         stroke="currentColor" class="w-4 h-4 mr-2">
@@ -13,7 +22,7 @@
                     </svg>
                     {{ __('Back to Roles') }}
                 </a>
-                <a href="{{ route('roles.show', $role) }}"
+                <a href="{{ route('roles.show', $role) . $tenantSuffix }}"
                     class="inline-flex items-center px-4 py-2 bg-gray-600 dark:bg-gray-500 border border-transparent rounded-md font-semibold text-xs text-white dark:text-gray-100 uppercase tracking-widest hover:bg-gray-500 dark:hover:bg-gray-400 focus:bg-gray-500 dark:focus:bg-gray-400 active:bg-gray-700 dark:active:bg-gray-600 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 dark:focus:ring-offset-gray-800 transition ease-in-out duration-150">
                     <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
                         stroke="currentColor" class="w-4 h-4 mr-2">
@@ -32,12 +41,12 @@
             <div class="bg-white dark:bg-gray-800 overflow-hidden shadow-sm sm:rounded-lg">
                 <div class="p-6 text-gray-900 dark:text-gray-100">
                     @include('roles.partials.role-form', [
-                        'action' => route('roles.update', $role),
+                        'action' => route('roles.update', $role) . $tenantSuffix,
                         'method' => 'PUT',
                         'role' => $role,
                         'permissions' => $permissions,
                         'submitText' => __('Update Role'),
-                        'cancelRoute' => 'roles.show'
+                        'cancelRoute' => 'roles.show',
                     ])
                 </div>
             </div>
