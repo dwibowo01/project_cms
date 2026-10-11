@@ -19,7 +19,7 @@ return new class extends Migration
             $table->text('name');
             $table->unsignedInteger('qty')->nullable();
             $table->string('unit')->nullable();
-            $table->decimal('unit_price', 15, 2)->default(0);
+            $table->decimal('unit_price', 15, 2)->nullable();
             $table->unsignedInteger('sort_order')->default(0);
             $table->string('tenant_id')->nullable();
             $table->timestamps();

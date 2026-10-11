@@ -1,10 +1,14 @@
 @php
     $indentPx = $item->depth * 20;
+    $isParent = $item->children->isNotEmpty();
 @endphp
 
 <tr class="hover:bg-gray-50 dark:hover:bg-gray-700/50">
-    <td class="px-4 py-3 align-top whitespace-nowrap text-gray-900 dark:text-gray-100">{{ $item->code }}.</td>
-    <th scope="row" class="px-4 py-3 font-normal text-gray-900 dark:text-gray-100 align-top">
+    <td
+        class="px-4 py-3 align-top whitespace-nowrap text-gray-900 dark:text-gray-100 {{ $isParent ? 'font-bold' : '' }}">
+        {{ $item->code }}.</td>
+    <th scope="row"
+        class="px-4 py-3 text-gray-900 dark:text-gray-100 align-top {{ $isParent ? 'font-bold' : 'font-normal' }}">
         <span style="padding-left: {{ $indentPx }}px" class="block">{{ $item->name }}</span>
     </th>
     <td class="px-4 py-3 align-top whitespace-nowrap">{{ $item->qty ? number_format($item->qty, 0, ',', '.') : '-' }}
@@ -13,7 +17,7 @@
     <td class="px-4 py-3 align-top whitespace-nowrap">
         {{ $item->qty && $item->unit_price ? 'Rp ' . number_format((float) $item->unit_price, 0, ',', '.') : '-' }}</td>
     <td class="px-4 py-3 align-top whitespace-nowrap">
-        {{ $item->total ? 'Rp ' . number_format($item->total, 0, ',', '.') : '-' }}</td>
+        {{ $isParent || !$item->total ? '-' : 'Rp ' . number_format($item->total, 0, ',', '.') }}</td>
     <td class="px-4 py-3 align-top whitespace-nowrap">
         <a href="{{ route('quotations.items.create', ['quotation' => $quotation, 'parent_id' => $item->id]) }}"
             title="{{ __('Add Sub-item') }}"
