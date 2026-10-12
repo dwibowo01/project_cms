@@ -61,7 +61,7 @@ class QuotationController extends Controller
         $quotation = Quotation::create([
             ...collect($data)->only([
                 'client_id', 'client_contact_id', 'ship_id',
-                'docking_year', 'survey_type', 'quotation_date',
+                'docking_year', 'survey_type', 'docking_project_type', 'quotation_date',
             ])->all(),
             'master_item_category_id' => $mode === 'master-item' ? $data['master_item_category_id'] : null,
             'source_quotation_id' => $mode === 'duplicate' ? $data['source_quotation_id'] : null,
@@ -129,6 +129,7 @@ class QuotationController extends Controller
             'created_by' => $request->user()->id,
             'docking_year' => $quotation->docking_year,
             'survey_type' => $quotation->survey_type,
+            'docking_project_type' => $quotation->docking_project_type->value,
             'quotation_date' => now()->toDateString(),
         ]);
 

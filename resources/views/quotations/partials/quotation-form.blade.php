@@ -3,6 +3,7 @@
     $selectedContactId = old('client_contact_id', $quotation->client_contact_id ?? '');
     $selectedShipId = old('ship_id', $quotation->ship_id ?? '');
     $selectedSurveyType = old('survey_type', $quotation->survey_type ?? '');
+    $selectedDockingProjectType = old('docking_project_type', $quotation->docking_project_type?->value ?? \App\Enums\DockingProjectType::DOCKING->value);
 @endphp
 
 <div x-data="{
@@ -73,6 +74,25 @@
                 @endforeach
             </select>
             <x-input-error :messages="$errors->get('survey_type')" class="mt-2" />
+        </div>
+    </div>
+
+    <div class="grid grid-cols-1 sm:grid-cols-2 gap-6 mb-6">
+        <div>
+            <x-input-label for="docking_project_type" :value="__('Jenis Pekerjaan Docking')" />
+            <select id="docking_project_type" name="docking_project_type" required
+                class="border-gray-300 dark:border-gray-700 dark:bg-gray-900 dark:text-gray-300 focus:border-indigo-500 dark:focus:border-indigo-600 focus:ring-indigo-500 dark:focus:ring-indigo-600 rounded-md shadow-sm block mt-1 w-full">
+                @foreach (\App\Enums\DockingProjectType::cases() as $type)
+                    <option value="{{ $type->value }}"
+                        {{ $selectedDockingProjectType === $type->value ? 'selected' : '' }}>
+                        {{ $type->value }}
+                    </option>
+                @endforeach
+            </select>
+            <x-input-error :messages="$errors->get('docking_project_type')" class="mt-2" />
+            <p class="mt-2 text-sm text-gray-500 dark:text-gray-400">
+                {{ __('Determines the quotation title, e.g. "PENAWARAN DOCKING [Ship Name]", "PENAWARAN FLOATING [Ship Name]", or "PENAWARAN ONSITE [Ship Name]".') }}
+            </p>
         </div>
     </div>
 </div>

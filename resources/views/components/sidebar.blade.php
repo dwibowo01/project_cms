@@ -231,9 +231,11 @@ $tenantSuffix =
                     </a>
 
                     {{-- Confirm Order --}}
-                    <a href=""
+                    <a href="{{ route('confirm-orders.index') . $tenantSuffix }}"
                         class="flex items-center gap-3 px-3 py-2 rounded-lg text-sm font-medium transition-all duration-150
-                               text-gray-600 hover:bg-gray-100 hover:text-gray-900 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white">
+                               {{ request()->routeIs('confirm-orders.*')
+                                   ? 'bg-gray-100 text-gray-900 dark:bg-gray-700 dark:text-white'
+                                   : 'text-gray-600 hover:bg-gray-100 hover:text-gray-900 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white' }}">
                         <svg class="w-4 h-4 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                 d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
@@ -253,9 +255,11 @@ $tenantSuffix =
                     </a>
 
                     {{-- Invoice --}}
-                    <a href=""
+                    <a href="{{ route('invoices.index') . $tenantSuffix }}"
                         class="flex items-center gap-3 px-3 py-2 rounded-lg text-sm font-medium transition-all duration-150
-                               text-gray-600 hover:bg-gray-100 hover:text-gray-900 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white">
+                               {{ request()->routeIs('invoices.*')
+                                   ? 'bg-gray-100 text-gray-900 dark:bg-gray-700 dark:text-white'
+                                   : 'text-gray-600 hover:bg-gray-100 hover:text-gray-900 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white' }}">
                         <svg class="w-4 h-4 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                 d="M17 9V7a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2m2 4h10a2 2 0 002-2v-6a2 2 0 00-2-2H9a2 2 0 00-2 2v6a2 2 0 002 2zm7-5a2 2 0 11-4 0 2 2 0 014 0z" />
@@ -298,14 +302,55 @@ $tenantSuffix =
                     style="display: none;">
 
                     {{-- Project --}}
-                    <a href=""
+                    <a href="{{ route('projects.index') . $tenantSuffix }}"
                         class="flex items-center gap-3 px-3 py-2 rounded-lg text-sm font-medium transition-all duration-150
-                               text-gray-600 hover:bg-gray-100 hover:text-gray-900 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white">
+                               {{ request()->routeIs('projects.*')
+                                   ? 'bg-gray-100 text-gray-900 dark:bg-gray-700 dark:text-white'
+                                   : 'text-gray-600 hover:bg-gray-100 hover:text-gray-900 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white' }}">
                         <svg class="w-4 h-4 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                d="M9 17v-6a2 2 0 012-2h6M9 17H5a2 2 0 00-2 2v3m14-6h2a2 2 0 012 2v3m-6-6h6" />
+                                d="M3 7a2 2 0 012-2h4l2 2h8a2 2 0 012 2v8a2 2 0 01-2 2H5a2 2 0 01-2-2V7z" />
                         </svg>
                         {{ __('Project') }}
+                    </a>
+
+                    {{-- Project Teams --}}
+                    <a href="{{ route('project-teams.index') . $tenantSuffix }}"
+                        class="flex items-center gap-3 px-3 py-2 rounded-lg text-sm font-medium transition-all duration-150
+                               {{ request()->routeIs('project-teams.*')
+                                   ? 'bg-gray-100 text-gray-900 dark:bg-gray-700 dark:text-white'
+                                   : 'text-gray-600 hover:bg-gray-100 hover:text-gray-900 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white' }}">
+                        <svg class="w-4 h-4 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z" />
+                        </svg>
+                        {{ __('Project Teams') }}
+                    </a>
+
+                    {{-- Repair List --}}
+                    <a href="{{ route('repair-lists.index') . $tenantSuffix }}"
+                        class="flex items-center gap-3 px-3 py-2 rounded-lg text-sm font-medium transition-all duration-150
+                               {{ request()->routeIs('repair-lists.*')
+                                   ? 'bg-gray-100 text-gray-900 dark:bg-gray-700 dark:text-white'
+                                   : 'text-gray-600 hover:bg-gray-100 hover:text-gray-900 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white' }}">
+                        <svg class="w-4 h-4 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M14.7 6.3a1 1 0 000 1.4l1.6 1.6a1 1 0 001.4 0l3.77-3.77a6 6 0 01-7.94 7.94l-6.91 6.91a2.12 2.12 0 01-3-3l6.91-6.91a6 6 0 017.94-7.94l-3.76 3.76z" />
+                        </svg>
+                        {{ __('Repair List') }}
+                    </a>
+
+                    {{-- Project Budget --}}
+                    <a href="{{ route('project-budgets.index') . $tenantSuffix }}"
+                        class="flex items-center gap-3 px-3 py-2 rounded-lg text-sm font-medium transition-all duration-150
+                               {{ request()->routeIs('project-budgets.*')
+                                   ? 'bg-gray-100 text-gray-900 dark:bg-gray-700 dark:text-white'
+                                   : 'text-gray-600 hover:bg-gray-100 hover:text-gray-900 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white' }}">
+                        <svg class="w-4 h-4 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M17 9V7a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2m2 4h10a2 2 0 002-2v-6a2 2 0 00-2-2H9a2 2 0 00-2 2v6a2 2 0 002 2zm7-5a2 2 0 11-4 0 2 2 0 014 0z" />
+                        </svg>
+                        {{ __('Project Budget') }}
                     </a>
 
                 </div>

@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Enums\DockingProjectType;
 use App\Models\Scopes\CentralAppScope;
 use Illuminate\Database\Eloquent\Attributes\ScopedBy;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -31,17 +32,21 @@ class Quotation extends Model
         'created_by',
         'docking_year',
         'survey_type',
+        'docking_project_type',
         'quotation_date',
     ];
 
     protected $casts = [
         'revision' => 'integer',
+        'docking_project_type' => DockingProjectType::class,
         'quotation_date' => 'date',
     ];
 
     protected static function booted(): void
     {
         static::creating(function (self $quotation): void {
+            $quotation->docking_project_type ??= DockingProjectType::DOCKING;
+
             if (empty($quotation->quote_no)) {
                 $quotation->quote_no = static::nextQuoteNo();
             }
@@ -94,6 +99,11 @@ class Quotation extends Model
     public function items(): HasMany
     {
         return $this->hasMany(QuotationItem::class);
+    }
+
+    public function confirmOrders(): HasMany
+    {
+        return $this->hasMany(ConfirmOrder::class);
     }
 
     /**

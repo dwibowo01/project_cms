@@ -12,7 +12,6 @@ use Illuminate\Support\Facades\DB;
 
 class DatabaseSeeder extends Seeder
 {
-
     /**
      * Seed the application's database.
      */
@@ -31,31 +30,32 @@ class DatabaseSeeder extends Seeder
         $this->call(RoleSeeder::class);
         $this->call(MasterItemCategoriesSeeder::class);
         $this->call(MasterItemsSeeder::class);
+        $this->call(ProjectTeamUsersSeeder::class);
 
         $tenantUsers = [
             [
-                'name'      => 'Docking User',
-                'email'     => 'docking@caputra.com',
+                'name' => 'Docking User',
+                'email' => 'docking@caputra.com',
                 'tenant_id' => 'docking',
-                'role'      => Roles::MEMBER_DOCKING,
+                'role' => Roles::MEMBER_DOCKING,
             ],
             [
-                'name'      => 'New Building User',
-                'email'     => 'newbuilding@caputra.com',
+                'name' => 'New Building User',
+                'email' => 'newbuilding@caputra.com',
                 'tenant_id' => 'new-building',
-                'role'      => Roles::MEMBER_NEW_BUILDING,
+                'role' => Roles::MEMBER_NEW_BUILDING,
             ],
             [
-                'name'      => 'Site User',
-                'email'     => 'site@caputra.com',
+                'name' => 'Site User',
+                'email' => 'site@caputra.com',
                 'tenant_id' => 'site',
-                'role'      => Roles::MEMBER_SITE,
+                'role' => Roles::MEMBER_SITE,
             ],
         ];
 
         foreach ($tenantUsers as $data) {
             $user = User::factory()->create([
-                'name'  => $data['name'],
+                'name' => $data['name'],
                 'email' => $data['email'],
             ]);
 
@@ -69,9 +69,9 @@ class DatabaseSeeder extends Seeder
 
                 if ($role) {
                     DB::table(config('permission.table_names.model_has_roles'))->insertOrIgnore([
-                        'role_id'    => $role->id,
+                        'role_id' => $role->id,
                         'model_type' => $user->getMorphClass(),
-                        'model_id'   => $user->id,
+                        'model_id' => $user->id,
                     ]);
                 }
             });

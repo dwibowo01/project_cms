@@ -17,6 +17,7 @@ use PhpOffice\PhpSpreadsheet\Style\Fill;
 class QuotationSpreadsheetExporter
 {
     private const HEADER_FILL = 'FFF9E79F';
+
     private const LABEL_COLUMN_WIDTH = 42;
 
     public static function make(Quotation $quotation): Spreadsheet
@@ -24,7 +25,7 @@ class QuotationSpreadsheetExporter
         $quotation->loadMissing(['client', 'clientContact', 'ship', 'creator']);
         $items = QuotationItem::treeForQuotation($quotation->id);
 
-        $spreadsheet = new Spreadsheet();
+        $spreadsheet = new Spreadsheet;
         $sheet = $spreadsheet->getActiveSheet();
         $sheet->setTitle('Penawaran');
 
@@ -34,7 +35,7 @@ class QuotationSpreadsheetExporter
 
         $row = 1;
 
-        $drawing = new \PhpOffice\PhpSpreadsheet\Worksheet\Drawing();
+        $drawing = new \PhpOffice\PhpSpreadsheet\Worksheet\Drawing;
         $drawing->setName('Logo');
         $drawing->setPath(public_path('logo_caputra.png'));
         $drawing->setHeight(40);
@@ -63,7 +64,7 @@ class QuotationSpreadsheetExporter
         }
 
         $row++;
-        $sheet->setCellValue("A{$row}", 'PENAWARAN DOCKING '.$quotation->ship->ship_name);
+        $sheet->setCellValue("A{$row}", 'PENAWARAN '.$quotation->docking_project_type->value.' '.$quotation->ship->ship_name);
         $sheet->mergeCells("A{$row}:F{$row}");
         $sheet->getStyle("A{$row}")->getFont()->setBold(true)->setSize(13);
         $sheet->getStyle("A{$row}")->getAlignment()->setHorizontal(Alignment::HORIZONTAL_CENTER);

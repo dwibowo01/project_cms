@@ -2,8 +2,11 @@
 
 namespace App\Http\Requests\Quotation;
 
+use App\Enums\DockingProjectType;
+use App\Models\Quotation;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
+use Illuminate\Validation\Rules\Enum;
 
 class UpdateQuotationRequest extends FormRequest
 {
@@ -26,7 +29,8 @@ class UpdateQuotationRequest extends FormRequest
                 Rule::exists('ships', 'id')->where('tenant_id', tenant('id'))->where('client_id', $this->input('client_id')),
             ],
             'docking_year' => ['required', 'digits:4'],
-            'survey_type' => ['required', Rule::in(\App\Models\Quotation::SURVEY_TYPES)],
+            'survey_type' => ['required', Rule::in(Quotation::SURVEY_TYPES)],
+            'docking_project_type' => ['required', new Enum(DockingProjectType::class)],
             'quotation_date' => ['required', 'date'],
             'revision' => ['nullable', 'integer', 'min:0'],
         ];

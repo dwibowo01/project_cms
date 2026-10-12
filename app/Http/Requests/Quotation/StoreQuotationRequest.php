@@ -2,9 +2,11 @@
 
 namespace App\Http\Requests\Quotation;
 
+use App\Enums\DockingProjectType;
 use App\Models\Quotation;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
+use Illuminate\Validation\Rules\Enum;
 
 class StoreQuotationRequest extends FormRequest
 {
@@ -29,6 +31,7 @@ class StoreQuotationRequest extends FormRequest
             ],
             'docking_year' => ['required', 'digits:4'],
             'survey_type' => ['required', Rule::in(Quotation::SURVEY_TYPES)],
+            'docking_project_type' => ['required', new Enum(DockingProjectType::class)],
             'quotation_date' => ['required', 'date'],
             'master_item_category_id' => [
                 'required_if:mode,master-item',

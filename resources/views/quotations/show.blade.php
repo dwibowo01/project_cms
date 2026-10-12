@@ -93,7 +93,7 @@
                     <!-- Title -->
                     <h1
                         class="text-center text-xl font-bold text-gray-900 dark:text-gray-100 border-y border-gray-800 dark:border-gray-200 py-3 mb-6">
-                        {{ __('PENAWARAN DOCKING') }} {{ $quotation->ship->ship_name }}
+                        {{ __('PENAWARAN') }} {{ $quotation->docking_project_type->value }} {{ $quotation->ship->ship_name }}
                     </h1>
 
                     <!-- Ship Identity -->
