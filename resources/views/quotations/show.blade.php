@@ -24,10 +24,6 @@
                         {{ __('Create New Revision') }}
                     </button>
                 </form>
-                {{-- <a href="{{ route('quotations.items.create', $quotation) }}"
-                    class="inline-flex items-center px-4 py-2 bg-gray-800 dark:bg-gray-200 border border-transparent rounded-md font-semibold text-xs text-white dark:text-gray-800 uppercase tracking-widest hover:bg-gray-700 dark:hover:bg-white focus:bg-gray-700 dark:focus:bg-white active:bg-gray-900 dark:active:bg-gray-300 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 dark:focus:ring-offset-gray-800 transition ease-in-out duration-150">
-                    {{ __('Add Master Item') }}
-                </a> --}}
                 <x-danger-button x-data=""
                     x-on:click.prevent="$dispatch('open-modal', 'confirm-quotation-deletion-{{ $quotation->id }}')">
                     {{ __('Delete') }}
@@ -151,63 +147,10 @@
                     </div>
 
                     <!-- Items -->
-                    @if ($items->isNotEmpty())
-                        <div class="overflow-x-auto">
-                            <table
-                                class="w-full border-collapse bg-white dark:bg-gray-800 text-left text-sm text-gray-500 dark:text-gray-400">
-                                <thead class="bg-yellow-100 dark:bg-gray-700">
-                                    <tr>
-                                        <th scope="col"
-                                            class="px-4 py-3 font-medium text-gray-900 dark:text-gray-100">
-                                            {{ __('No.') }}</th>
-                                        <th scope="col"
-                                            class="px-4 py-3 font-medium text-gray-900 dark:text-gray-100">
-                                            {{ __('URAIAN') }}</th>
-                                        <th scope="col"
-                                            class="px-4 py-3 font-medium text-gray-900 dark:text-gray-100">
-                                            {{ __('QTY.') }}</th>
-                                        <th scope="col"
-                                            class="px-4 py-3 font-medium text-gray-900 dark:text-gray-100">
-                                            {{ __('UNIT') }}</th>
-                                        <th scope="col"
-                                            class="px-4 py-3 font-medium text-gray-900 dark:text-gray-100">
-                                            {{ __('UNIT RATE') }} (Rp)</th>
-                                        <th scope="col"
-                                            class="px-4 py-3 font-medium text-gray-900 dark:text-gray-100">
-                                            {{ __('TOTAL') }} (Rp)</th>
-                                        <th scope="col"
-                                            class="px-4 py-3 font-medium text-gray-900 dark:text-gray-100"></th>
-                                    </tr>
-                                </thead>
-                                <tbody
-                                    class="divide-y divide-gray-100 dark:divide-gray-700 border-t border-gray-100 dark:border-gray-700">
-                                    @foreach ($items as $item)
-                                        @include('quotations.partials.item-node', [
-                                            'item' => $item,
-                                            'quotation' => $quotation,
-                                        ])
-                                    @endforeach
-                                </tbody>
-                                <tfoot>
-                                    <tr
-                                        class="font-semibold text-gray-900 dark:text-gray-100 border-t-2 border-gray-800 dark:border-gray-200">
-                                        <td class="px-4 py-3" colspan="5">{{ __('TOTAL') }}</td>
-                                        <td class="px-4 py-3">Rp
-                                            {{ number_format($quotation->grand_total, 0, ',', '.') }}</td>
-                                        <td class="px-4 py-3"></td>
-                                    </tr>
-                                </tfoot>
-                            </table>
-                        </div>
-                    @else
-                        <p class="text-sm text-gray-500 dark:text-gray-400">
-                            {{ __('No items yet.') }}
-                            <a href="{{ route('quotations.items.create', $quotation) }}"
-                                class="text-indigo-600 hover:underline">
-                                {{ __('Add Master Item') }}
-                            </a>
-                        </p>
-                    @endif
+                    @include('quotations.partials.items-section', [
+                        'quotation' => $quotation,
+                        'items' => $items,
+                    ])
                 </div>
             </div>
 
@@ -223,6 +166,8 @@
                                         {{ __('Revision') }} {{ $revisionQuotation->revision }}
                                         <span class="text-gray-400">&middot;</span>
                                         {{ optional($revisionQuotation->quotation_date)->format('d M Y') }}
+                                        <span class="text-gray-400">&middot;</span>
+                                        Rp {{ number_format($revisionQuotation->grand_total, 0, ',', '.') }}
                                         @if ($revisionQuotation->id === $quotation->id)
                                             <span
                                                 class="ml-2 inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium bg-indigo-100 dark:bg-indigo-900/30 text-indigo-800 dark:text-indigo-200">{{ __('Viewing') }}</span>

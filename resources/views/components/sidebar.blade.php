@@ -14,7 +14,8 @@ $tenantSuffix =
 <div x-data="{
     collapsed: localStorage.getItem('sidebar_collapsed') === 'true',
     tenantMenuOpen: false,
-    marketingOpen: false
+    marketingOpen: false,
+    projectManagementOpen: false
 }" x-init="$watch('collapsed', val => localStorage.setItem('sidebar_collapsed', val))" :class="collapsed ? 'w-16' : 'w-64'"
     class="flex flex-col h-full bg-white dark:bg-gray-900 text-gray-900 dark:text-white transition-all duration-300 ease-in-out flex-shrink-0">
 
@@ -265,16 +266,50 @@ $tenantSuffix =
                 </div>
             </div>
 
-            {{-- Project Management --}}
-            <x-sidebar-nav-item href="" :active="request()->routeIs('')">
-                <x-slot name="icon">
-                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                            d="M9 17v-6a2 2 0 012-2h6M9 17H5a2 2 0 00-2 2v3m14-6h2a2 2 0 012 2v3m-6-6h6" />
+            {{-- Project Management group with sub-items --}}
+            <div>
+                <button @click="projectManagementOpen = !projectManagementOpen"
+                    class="w-full flex items-center gap-3 px-3 py-2 rounded-lg text-sm font-medium transition-all duration-150
+                           text-gray-600 hover:bg-gray-100 hover:text-gray-900 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white"
+                    :class="collapsed ? 'justify-center' : ''"
+                    :title="collapsed ? '{{ __('Project Management') }}' : ''">
+                    <span class="flex-shrink-0 text-gray-500 dark:text-gray-400">
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M9 17v-6a2 2 0 012-2h6M9 17H5a2 2 0 00-2 2v3m14-6h2a2 2 0 012 2v3m-6-6h6" />
+                        </svg>
+                    </span>
+                    <span x-show="!collapsed" x-transition.opacity
+                        class="flex-1 truncate text-left">{{ __('Project Management') }}</span>
+                    <svg x-show="!collapsed" class="w-4 h-4 flex-shrink-0 transition-transform duration-200"
+                        :class="projectManagementOpen ? 'rotate-180' : ''" fill="none" stroke="currentColor"
+                        viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
                     </svg>
-                </x-slot>
-                {{ __('Project Management') }}
-            </x-sidebar-nav-item>
+                </button>
+
+                <div x-show="projectManagementOpen && !collapsed"
+                    x-transition:enter="transition ease-out duration-100"
+                    x-transition:enter-start="opacity-0 -translate-y-1"
+                    x-transition:enter-end="opacity-100 translate-y-0"
+                    x-transition:leave="transition ease-in duration-75" x-transition:leave-start="opacity-100"
+                    x-transition:leave-end="opacity-0"
+                    class="mt-1 ml-4 pl-3 border-l border-gray-200 dark:border-gray-700 space-y-0.5"
+                    style="display: none;">
+
+                    {{-- Project --}}
+                    <a href=""
+                        class="flex items-center gap-3 px-3 py-2 rounded-lg text-sm font-medium transition-all duration-150
+                               text-gray-600 hover:bg-gray-100 hover:text-gray-900 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white">
+                        <svg class="w-4 h-4 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M9 17v-6a2 2 0 012-2h6M9 17H5a2 2 0 00-2 2v3m14-6h2a2 2 0 012 2v3m-6-6h6" />
+                        </svg>
+                        {{ __('Project') }}
+                    </a>
+
+                </div>
+            </div>
 
             {{-- Ship Database --}}
             <x-sidebar-nav-item href="{{ route('ships.index') . $tenantSuffix }}" :active="request()->routeIs('ships.*')">

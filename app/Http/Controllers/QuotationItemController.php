@@ -6,58 +6,32 @@ use App\Http\Requests\QuotationItem\StoreQuotationItemRequest;
 use App\Http\Requests\QuotationItem\UpdateQuotationItemRequest;
 use App\Models\Quotation;
 use App\Models\QuotationItem;
-use Illuminate\Http\RedirectResponse;
-use Illuminate\Http\Request;
-use Illuminate\Support\Collection;
-use Illuminate\View\View;
+use Illuminate\Http\JsonResponse;
 
 class QuotationItemController extends Controller
 {
-    public function create(Request $request, Quotation $quotation): View
-    {
-        $parent = $request->filled('parent_id') ? QuotationItem::find($request->query('parent_id')) : null;
-
-        return view('quotations.items.create', [
-            'quotation' => $quotation,
-            'parent' => $parent,
-            'parentOptions' => $this->parentOptions($quotation->id),
-        ]);
-    }
-
-    public function store(StoreQuotationItemRequest $request, Quotation $quotation): RedirectResponse
+    public function store(StoreQuotationItemRequest $request, Quotation $quotation): JsonResponse
     {
         $data = $request->validated();
         $data['sort_order'] = $this->nextSortOrder($quotation->id, $data['parent_id'] ?? null);
 
         $quotation->items()->create($data);
 
-        return redirect()->route('quotations.show', $quotation)
-            ->with('success', __('Item created successfully.'));
+        return $this->itemsSectionResponse($quotation);
     }
 
-    public function edit(Quotation $quotation, QuotationItem $item): View
-    {
-        return view('quotations.items.edit', [
-            'quotation' => $quotation,
-            'item' => $item,
-            'parentOptions' => $this->parentOptions($quotation->id, $item),
-        ]);
-    }
-
-    public function update(UpdateQuotationItemRequest $request, Quotation $quotation, QuotationItem $item): RedirectResponse
+    public function update(UpdateQuotationItemRequest $request, Quotation $quotation, QuotationItem $item): JsonResponse
     {
         $item->update($request->validated());
 
-        return redirect()->route('quotations.show', $quotation)
-            ->with('success', __('Item updated successfully.'));
+        return $this->itemsSectionResponse($quotation);
     }
 
-    public function destroy(Quotation $quotation, QuotationItem $item): RedirectResponse
+    public function destroy(Quotation $quotation, QuotationItem $item): JsonResponse
     {
         $item->delete();
 
-        return redirect()->route('quotations.show', $quotation)
-            ->with('success', __('Item deleted successfully.'));
+        return $this->itemsSectionResponse($quotation);
     }
 
     private function nextSortOrder(int $quotationId, ?int $parentId): int
@@ -70,24 +44,16 @@ class QuotationItemController extends Controller
         return (int) $max + 1;
     }
 
-    // Flattened, depth-ordered options for the parent <select>; excludes a node and its own subtree.
-    private function parentOptions(int $quotationId, ?QuotationItem $excluding = null): Collection
+    // Re-renders the whole items table so the server stays the single source of truth for outline codes/totals.
+    private function itemsSectionResponse(Quotation $quotation): JsonResponse
     {
-        $options = collect();
+        $quotation = $quotation->fresh();
 
-        $flatten = function (Collection $nodes) use (&$flatten, &$options, $excluding): void {
-            foreach ($nodes as $node) {
-                if ($excluding && $node->id === $excluding->id) {
-                    continue;
-                }
+        $html = view('quotations.partials.items-section', [
+            'quotation' => $quotation,
+            'items' => QuotationItem::treeForQuotation($quotation->id),
+        ])->render();
 
-                $options->push($node);
-                $flatten($node->children);
-            }
-        };
-
-        $flatten(QuotationItem::treeForQuotation($quotationId));
-
-        return $options;
+        return response()->json(['html' => $html]);
     }
 }

@@ -53,6 +53,6 @@ Route::middleware([
         ->middleware(['auth', 'verified']);
     Route::resource('quotations', QuotationController::class)->middleware(['auth', 'verified']);
     Route::resource('quotations.items', QuotationItemController::class)
-        ->only(['create', 'store', 'edit', 'update', 'destroy'])
+        ->only(['store', 'update', 'destroy'])
         ->middleware(['auth', 'verified']);
 });
